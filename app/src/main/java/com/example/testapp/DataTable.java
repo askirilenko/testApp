@@ -33,7 +33,6 @@ public class DataTable extends AppCompatActivity {
 
     int currentPage = 1;
     int itemCount = 0;
-    int limit=200;
 
     private boolean isLastPage = false;
 
@@ -57,14 +56,10 @@ public class DataTable extends AppCompatActivity {
 
                 int lastvisibleitemposition = layoutManager.findLastVisibleItemPosition();
                 if (lastvisibleitemposition == dataAdapter.getItemCount() - 1) {
-
                     if (!isLastPage) {
                         currentPage++;
                         loadJSON(authorizationCode);
-
                     }
-
-
                 }
             }
         });
@@ -94,12 +89,15 @@ public class DataTable extends AppCompatActivity {
                     throws IOException {
 
                 String jsonData = response.body().string();
+                if (jsonData.length()==0){
+                    isLastPage=true;
+                    return;
+                }
                 JSONObject Jobject = null;
                 try {
                     Jobject = new JSONObject(jsonData);
                 } catch (JSONException e) {
                     Log.d(TAG,"Jobject is null");
-                    currentPage--;
                     return;
                 }
                loadDataItem(Jobject);
@@ -112,15 +110,12 @@ public class DataTable extends AppCompatActivity {
 
     private void loadDataItem(JSONObject Jobject){
         JSONArray jsonArray=null;
+
         try {
             try {jsonArray = Jobject.getJSONArray("data");}
             catch (NullPointerException e){
                 Log.d(TAG,"jsonArray is null");
-                // e.printStackTrace();
-              //  return;
             }
-
-            if (jsonArray.length()==0) isLastPage=true;
 
             for (int i=0;i< jsonArray.length();i++){
                 itemCount++;
@@ -142,7 +137,6 @@ public class DataTable extends AppCompatActivity {
         showData();
     }
 
-
     private void showData() {
         runOnUiThread(new Runnable() {
             public void run() {
@@ -150,7 +144,4 @@ public class DataTable extends AppCompatActivity {
             }
         });
     }
-
-
-
 }

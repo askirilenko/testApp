@@ -79,7 +79,6 @@ public class MainActivity extends AppCompatActivity
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
                 try {
                     String authorizationStatus = Jobject.get("status").toString();
                     String authorizationCode = Jobject.get("code").toString();
@@ -88,14 +87,11 @@ public class MainActivity extends AppCompatActivity
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
-
             public void onFailure(Call call, IOException e) {
             }
         });
     }
-
 
     private boolean checkStatus(String authorizationStatus){
         return authorizationStatus.equals("ok");
